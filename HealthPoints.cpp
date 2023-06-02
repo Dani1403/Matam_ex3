@@ -99,20 +99,3 @@ std::ostream& operator<<(std::ostream& os, const HealthPoints& hp)
 	os << hp.getHealthPoints() << "(" << hp.getMaxHealthPoints() << ")";
 	return os;
 }
-
-
-int main()
-{
-	bool comparisonResult;
-	HealthPoints healthPoints1(100);
-	HealthPoints healthPoints2 = 100; /* 100 points out of 100 */
-	comparisonResult = (healthPoints1 == healthPoints2); /* returns true */
-	healthPoints2 = HealthPoints(150); /* has 150 points out of 150 */
-	comparisonResult = (healthPoints1 == healthPoints2); /* returns false */
-	healthPoints2 -= 50; /* now has 100 points out of 150 */
-	comparisonResult = (100 == healthPoints2); /* returns true */
-	comparisonResult = (healthPoints1 < healthPoints2); /* returns false */
-	healthPoints1 -= 50; /* now has 50 points out of 100 */
-	comparisonResult = (healthPoints1 < healthPoints2); /* returns true */
-	std::cout << healthPoints1 << ", " << healthPoints2; /* output is "50(100), 100(150)" */
-}

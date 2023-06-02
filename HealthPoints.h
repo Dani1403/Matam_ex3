@@ -1,0 +1,5 @@
+#ifndef HEALTH_POINTS
+#define HEALTH_POINTS 
+
+
+#endif //HEALTH_POINTS

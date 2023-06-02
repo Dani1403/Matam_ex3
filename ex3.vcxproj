@@ -129,6 +129,9 @@
   <ItemGroup>
     <ClInclude Include="HealthPoints.h" />
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="HealthPoints.cpp" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

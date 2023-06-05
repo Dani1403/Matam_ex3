@@ -128,12 +128,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="HealthPoints.h" />
+    <ClInclude Include="Queue.h" />
     <ClInclude Include="TestUtils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="HealthPoints.cpp" />
     <ClCompile Include="TestHealthPoints.cpp" />
     <ClCompile Include="TestMain.cpp" />
+    <ClCompile Include="TestQueue.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,26 +1,17 @@
 #ifndef QUEUE_H
 #define QUEUE_H
 
-template <class T>
-class Node
-{
-public:
-	T m_data;
-	Node* m_next;
-
-	explicit Node(T data) : m_data(data), m_next(nullptr) {}
-	Node& operator=(const Node& other) = default;
-	Node(const Node& other) = default;
-	~Node() = default;
-
-	const T& operator*() const { return m_data; }
-};
+#include <stdexcept>
 
 template <class T>
 class Queue
 {
 public:
 	//TODO : Constructor Copy Destructor and Assignment Operator
+	Queue() : m_size(0), m_head(nullptr), m_tail(nullptr) {}
+	~Queue();
+	Queue(const Queue<T>& other);
+	Queue<T>& operator=(const Queue<T>& other);
 
 	void pushBack(const T& value);
 	T& front() const;
@@ -33,15 +24,79 @@ public:
 	Iterator begin();
 	Iterator end();
 
-	class ConstIterator {};
+	class ConstIterator;
 	ConstIterator begin() const;
 	ConstIterator end() const;
+
+	class Node
+	{
+	public:
+		T m_data;
+		Node* m_next;
+
+		explicit Node(T data) : m_data(data), m_next(nullptr) {}
+		Node& operator=(const Node& other) {
+			if (this == &other)
+			{
+				return *this;
+			}
+			m_data = other.m_data;
+			m_next = other.m_next;
+			return *this;
+		}
+		Node(const Node& other) = default;
+		~Node() = default;
+
+		const T& operator*() const { return m_data; }
+	};
 
 private:
 	int m_size;
 	Node* m_head;
 	Node* m_tail;
 };
+
+template <class T>
+Queue<T>::~Queue()
+{
+	while(this->size() > 0)
+	{
+		this->popFront();
+	}
+}
+
+template <class T>
+Queue<T>::Queue(const Queue<T>& other)
+{
+	m_size = other.m_size;
+	m_head = nullptr;
+	m_tail = nullptr;
+	for (const T& element : other)
+	{
+		this->pushBack(element);
+	}
+}
+
+template <class T>
+Queue<T>& Queue<T>::operator=(const Queue<T>& other)
+{
+	if (this == &other)
+	{
+		return *this;
+	}
+	while (this->size() > 0)
+	{
+		this->popFront();
+	}
+	m_size = other.m_size;
+	m_head = nullptr;
+	m_tail = nullptr;
+	for (const T& element : other)
+	{
+		this->pushBack(element);
+	}
+	return *this;
+}
 
 /* Iterator Implementation */
 template <class T>
@@ -50,11 +105,10 @@ class Queue<T>::Iterator
 public:
 	T& operator*() const;
 	Iterator& operator++();
-	bool operator!=(const Iterator& other) const;
+	bool operator!=(const Iterator& other) const { return m_node != other.m_node; }
 
 	class InvalidOperation {};
 
-private:
 	Node* m_node;
 	Iterator(Node* node) : m_node(node) {}
 };
@@ -81,12 +135,6 @@ typename Queue<T>::Iterator& Queue<T>::Iterator::operator++()
 }
 
 template <class T>
-bool Queue<T>::Iterator::operator!=(const Iterator& other) const
-{
-	return m_node != other.m_node;
-}
-
-template <class T>
 typename Queue<T>::Iterator Queue<T>::begin()
 {
 	return Iterator(m_head);
@@ -109,11 +157,10 @@ class Queue<T>::ConstIterator
 public:
 	const T& operator*() const;
 	ConstIterator& operator++();
-	bool operator!=(const ConstIterator& other) const;
+	bool operator!=(const ConstIterator& other) const { return m_node != other.m_node; }
 
 	class InvalidOperation {};
 
-private:
 	const Node* m_node;
 	ConstIterator(const Node* node) : m_node(node) {}
 };
@@ -137,12 +184,6 @@ typename Queue<T>::ConstIterator& Queue<T>::ConstIterator::operator++()
 	}
 	m_node = m_node->m_next;
 	return *this;
-}
-
-template <class T>
-bool Queue<T>::ConstIterator::operator!=(const Queue<T>::ConstIterator& other) const
-{
-	return m_node != other.m_node;
 }
 
 template <class T>
@@ -190,7 +231,7 @@ T& Queue<T>::front() const
 {
 	if (m_head == nullptr)
 	{
-		throw Empty();
+		throw EmptyQueue();
 	}
 	return m_head->m_data;
 }
@@ -200,7 +241,7 @@ void Queue<T>::popFront()
 {
 	if (m_head == nullptr)
 	{
-		throw Empty();
+		throw EmptyQueue();
 	}
 	Node* temp = m_head;
 	m_head = m_head->m_next;
@@ -212,21 +253,27 @@ void Queue<T>::popFront()
 	}
 }
 
-//TODO : Faire avec Itérateur
 template <class T, class Condition>
 Queue<T> filter(const Queue<T>& queueToFilter, Condition c)
 {
 	Queue<T> filteredQueue;
-	Node* temp = queueToFilter.m_head;
-	while (temp != nullptr)
+	for (const T& element : queueToFilter)
 	{
-		if (c(temp->m_data))
+		if (c(element))
 		{
-			filteredQueue.pushBack(temp->m_data);
+			filteredQueue.pushBack(element);
 		}
-		temp = temp->m_next;
 	}
 	return filteredQueue;
+}
+
+template <class T, class Function>
+void transform(Queue<T>& queueToTransform, Function f)
+{
+	for (T& element : queueToTransform)
+	{
+		f(element);
+	}
 }
 
 

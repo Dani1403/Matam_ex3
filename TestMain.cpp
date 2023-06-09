@@ -51,6 +51,7 @@ int main(int argc, char* argv[])
 			std::cerr << "Error: index out of range: " << argv[1] << std::endl;
 			return 1;
 		}
+		std::cout << "Running test: " << idx << std::endl;
 		runTest(testsList[idx], "Test " + std::to_string(idx + 1));
 	}
 	return 0;

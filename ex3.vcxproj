@@ -130,6 +130,7 @@
     <ClInclude Include="HealthPoints.h" />
     <ClInclude Include="Queue.h" />
     <ClInclude Include="TestUtils.h" />
+    <ClInclude Include="ValidQueue.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="HealthPoints.cpp" />
